@@ -1,0 +1,51 @@
+import caperucita.*
+import feroz.*
+
+describe "La historia del Lobo Feroz y Caperucita" {
+
+    // Cambiamos el nombre a un método común inventado por nosotros
+    method prepararHistoria() {
+        // Historia base
+        feroz.correr() 
+        feroz.correr() // Corre a la casa de la abuelita
+        feroz.comer(abuelita) 
+        canasta.caerManzana() 
+        feroz.comer(caperucita) 
+    }
+
+    test "Peso y salud de Feroz antes de que llegue el cazador" {
+        self.prepararHistoria() // Llamamos a la historia base a mano
+        
+        // Arranca en 10. Corre 2 veces (-2) = 8. 
+        // Come abuelita (+5) = 13.
+        // Come Caperucita con 5 manzanas (61 * 0.10 = 6.1) = 19.1.
+        assert.equals(19.1, feroz.peso())
+        assert.notThat(feroz.estaSaludable())
+    }
+
+    test "Final A: El lobo se come al cazador" {
+        self.prepararHistoria() // Volvemos a prepararlo para este test
+        
+        feroz.comer(cazador)
+        // 19.1 + 9 (10% de 90) = 28.1
+        assert.equals(28.1, feroz.peso())
+        assert.that(feroz.estaSaludable())
+    }
+
+    test "Final B: El cazador provoca una crisis" {
+        self.prepararHistoria() // Y lo preparamos otra vez acá
+        
+        cazador.provocarCrisisA(feroz)
+        assert.equals(10, feroz.peso())
+        assert.notThat(feroz.estaSaludable())
+    }
+
+    test "Final C: El cazador lo espanta" {
+        self.prepararHistoria() // Última vez que lo preparamos
+        
+        cazador.espantar(feroz)
+        // pierde 3 unidades más por correr
+        assert.equals(16.1, feroz.peso())
+        assert.notThat(feroz.estaSaludable())
+    }
+}
